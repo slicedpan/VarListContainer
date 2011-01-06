@@ -172,7 +172,7 @@ public:
         {
             if(vlb_ptr[n]->get_type() == List<T_get>::get_static_type())
             {
-                vlb_ptr[n]->get(p_name, (void*) &ret);
+                static_cast<List<T_get>* >(vlb_ptr[n])->get(p_name, (void*) &ret);
                 return ret;
             }
             --n;
@@ -188,12 +188,13 @@ public:
         {
             if (vlb_ptr[n]->get_type() == List<T_set>::get_static_type())
             {
-                return vlb_ptr[n]->set(p_name, (void*) &var);
+                static_cast<List<T_set>* >(vlb_ptr[n])->set(p_name, (void*) &var);
+                return;
             }            
             --n;
         }
-        addtype<T_set>();
-        return vlb_ptr.back()->set(p_name, (void*) &var);
+        addtype<T_set>()->set(p_name, (void*) &var);
+        return;
     }
 
     template <class T_array>
@@ -205,7 +206,7 @@ public:
         {
             if (vlb_ptr[n]->get_type() == List<T_array>::get_static_type())
             {
-                vlb_ptr[n]->getarray(names, (void*) &arr);
+                static_cast<List<T_array>* >(vlb_ptr[n])->getarray(names, (void*) &arr);
                 return arr;
             }
             --n;
@@ -230,18 +231,19 @@ public:
             }
             --n;
         }
-        addtype<T_addarray>();
-        vlb_ptr.back()->setarray(names, (void*) &vars);
+        addtype<T_addarray>()->setarray(names, (void*) &vars);
+        return;
     }
 
 private:
 
     template <class T_add>
-    void addtype()
+    List<T_add>* addtype()
     {
         Base * vl_ptr;
         vl_ptr = new List<T_add>();
         vlb_ptr.push_back(vl_ptr);
+        return static_cast<List<T_add>* >(vl_ptr);
     }
 
     void removeall()
