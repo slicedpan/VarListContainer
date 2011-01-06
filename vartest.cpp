@@ -14,49 +14,25 @@
  */
 int main(int argc, char** argv)
 {
-    varListContainer vlc;
-    int i = 6;
-    char tmpc;
-    //vlc.addtype<int>();
-    vlc.set<int>("rara", 1);
-    vlc.set("rara2", i);
+	VarList::Container vlc;
+	int i = 6;
+	char tmpc;
+	//vlc.addtype<int>();
+	vlc.set<int>(std::string("rara"), 1);
+	vlc.set("rara2", i);
 
-    if(!vlc.get("rara", &i))
-    {
-        std::cout << "error1!" << std::endl;
-    }
-    std::cout << i << std::endl;
+	std::vector<std::string> strvec;
+	strvec.push_back("rara2");
+	//std::cout << vlc.getarray<int>(strvec)[0] << std::endl;
+	try
+	{
+		std::cout << "i = " << vlc.get<int>(strvec[0]) << std::endl;
+	}
 
-    if (!vlc.get<int>("rara2", &i))
-    {
-        std::cout << "error2!" << std::endl;
-    }
-
-    vlc.set<char>("mych", 'h');
-    vlc.set<float>("myfl", 54.334);
-
-    if (!vlc.get<char>("myfl", &tmpc))
-    {
-        std::cout << "error3!" << std::endl;
-    }
-
-    if (!vlc.get("myfl", &tmpc))
-    {
-        std::cout << "error4!" << std::endl;
-    }
-
-    /*if (!vlc.get<float>("myfl", &tmpc)) //This won't compile at all thankfully
-    {
-        std::cout << "error5!" << std::endl;
-    }
-    */
-
-    if (!vlc.get<char>("mych", (char*)&i))
-    {
-        std::cout << "error5" << std::endl;
-    }
-    std::cout << "i = " << i << std::endl;
-   
-    return (EXIT_SUCCESS);
+	catch (VarList::VarNotFoundException& e)
+	{
+		std::cout << e.what();
+	}
+	return (EXIT_SUCCESS);
 }
 
